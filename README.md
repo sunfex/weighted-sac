@@ -1,6 +1,6 @@
 ### Description
 ------------
-A weighted version of the [Soft Actor-Critic Algorithms](https://arxiv.org/pdf/1801.01290.pdf). The code is largely derived from a [Pytorch SAC Implementation](https://github.com/pranz24/pytorch-soft-actor-critic)
+A weighted version of the [Soft Actor-Critic Algorithms](https://arxiv.org/pdf/1801.01290.pdf). The code is adapted from a [Pytorch SAC Implementation](https://github.com/pranz24/pytorch-soft-actor-critic)
 
 We support four weighting strategies:
 
@@ -21,11 +21,17 @@ This implementation demonstrates that ERE, ERE\_apx and 1/age Weighting share ve
 
 ### Usage
 
+training:
 ```
-usage: main.py [-h] [--env_name] [--policy] [--eval]
-               [--gamma] [--tau] [--lr] [--alpha]
-               [--seed] [--batch_size] [--num_steps] [--hidden_size]
-               [--start_steps] [--replay_size] [--use_writer] [--mode]
+main.py [-h] [--env_name] [--policy] [--eval]
+        [--gamma] [--tau] [--lr] [--alpha]
+        [--seed] [--batch_size] [--num_steps] [--hidden_size]
+        [--start_steps] [--replay_size] [--use_writer] [--mode]
+```
+
+plot figure:
+```
+run read.py under ./fig
 ```
 
 ##### For uniform weighting, ERE\_apx, and 1/age:
@@ -54,10 +60,10 @@ python main.py --mode EREo
 
 ERE with estimated trajectory length (update once whenever getting a new (s,a,r,s'))
 ```
-python main.py --mode ERE
+python main.py --mode EREe
 ```
 
-(Note: We use `--mode EREo` to evaluate the ERE strategy in our paper. Still, `--mode ERE` has a very similar performance)
+(Note: We use `--mode EREo` to evaluate the ERE strategy in our paper. Still, `--mode EREe` has a very similar performance)
 
 ### Arguments
 

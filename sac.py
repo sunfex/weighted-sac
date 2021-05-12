@@ -42,7 +42,7 @@ class SAC(object):
         # Sample a batch from memory
         if args.mode == 'SAC':
             ss, aa, rewards, ns, msk = memory.sample(args.batch_size)
-        elif args.mode == 'ERE':
+        elif args.mode == 'EREe':
             ss, aa, rewards, ns, msk = memory.ERE_sample(args.batch_size, episode_step)
         elif args.mode == 'ERE2':
             ss, aa, rewards, ns, msk = memory.ERE2_sample(args.batch_size)
@@ -70,23 +70,22 @@ class SAC(object):
             min_qf_next_target = self.critic_target(ns, na) - self.alpha * n_log_pi
             next_q_value = rewards + msk * self.gamma * (min_qf_next_target)
         
-        # Q-function loss
+        # Q-function update
         qf_loss = self.critic.loss(ss, aa, next_q_value)
-        
-        # deterministic policy gradient
-        pi, log_pi, _ = self.policy.sample(ss)
-        min_qf_pi = self.critic(ss, pi)
-        policy_loss = ((self.alpha * log_pi) - min_qf_pi).mean()
-
-        # update        
         self.critic_optim.zero_grad()
         qf_loss.backward()
         self.critic_optim.step()
         soft_update(self.critic_target, self.critic, self.tau)
         
+        # deterministic policy gradient
+        pi, log_pi, _ = self.policy.sample(ss)
+        min_qf_pi = self.critic(ss, pi)
+        policy_loss = ((self.alpha * log_pi) - min_qf_pi).mean()
+ 
         self.policy_optim.zero_grad()
-        policy_loss.backward()
+        policy_loss.backward() 
         self.policy_optim.step()
+
 
         #entropy = -log_pi.mean().item()
         return log_likeli, dist
