@@ -51,6 +51,10 @@ class SAC(object):
         elif args.mode == 'HAR':
             ss, aa, rewards, ns, msk = memory.HAR_sample(args.batch_size)
         
+        elif args.mode == 'PER':
+            wei, ss, aa, rewards, ns, msk = memory.PER_sample(args, self.device, self.policy, 
+                                                              self.critic_target, self.critic)
+        
         if 'numpy' in str(type(ss)) or ss.device.type=='cpu':
             ss = torch.FloatTensor(ss).to(self.device)
             ns = torch.FloatTensor(ns).to(self.device)
@@ -71,7 +75,10 @@ class SAC(object):
             next_q_value = rewards + msk * self.gamma * (min_qf_next_target)
         
         # Q-function update
-        qf_loss = self.critic.loss(ss, aa, next_q_value)
+        if args.mode == 'PER':
+            qf_loss = self.critic.loss(ss, aa, next_q_value, wei)
+        else:
+            qf_loss = self.critic.loss(ss, aa, next_q_value)
         self.critic_optim.zero_grad()
         qf_loss.backward()
         self.critic_optim.step()

@@ -11,7 +11,7 @@ from tensorboardX import SummaryWriter
 from replay_memory import ReplayMemory
 
 parser = argparse.ArgumentParser(description='PyTorch Soft Actor-Critic with Sampling Strategies')
-parser.add_argument('--env_name', default="HalfCheetah-v2",
+parser.add_argument('--env_name', default="Humanoid-v2",
                     help='Mujoco Gym environment (default: HalfCheetah-v2)')
 parser.add_argument('--policy', default="Gaussian",
                     help='Policy Type: Gaussian | Deterministic (default: Gaussian)')
@@ -23,7 +23,7 @@ parser.add_argument('--tau', type=float, default=0.005, metavar='G',
                     help='target smoothing coefficient(τ) (default: 0.005)')
 parser.add_argument('--lr', type=float, default=0.0003, metavar='G',
                     help='learning rate (default: 0.0003)')
-parser.add_argument('--alpha', type=float, default=0.2, metavar='G',
+parser.add_argument('--alpha', type=float, default=0.05, metavar='G',
                     help='Temperature parameter determines the relative importance of \
                           the entropy term against the reward\
                           0.2 for HalfCeetah, Hopper, Ant, Walker2d\
@@ -41,7 +41,7 @@ parser.add_argument('--start_steps', type=int, default=10000, metavar='N',
 parser.add_argument('--replay_size', type=int, default=1000000, metavar='N',
                     help='size of replay buffer (default: 10000000)')
 parser.add_argument('--use_writer', type=bool, default=False)
-parser.add_argument('--mode', default='SAC', help = 'SAC, EREe, EREo, ERE2, or HAR')
+parser.add_argument('--mode', default='SAC', help = 'SAC, EREe, EREo, ERE2, HAR, PER')
 args = parser.parse_args()
 
 # Environment
